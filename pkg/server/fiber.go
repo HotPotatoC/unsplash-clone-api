@@ -55,22 +55,22 @@ func (f FiberEngine) Start() {
 // SetupHandlers registers the routes
 func (f FiberEngine) SetupHandlers() {
 	api := f.App.Group("/api")
-	api.Get("/photos", f.buildListAllPhotosAction())
-	api.Post("/photos", f.buildCreateNewPhotoAction())
-	api.Delete("/photos/:photoID", f.buildDeletePhotoAction())
+	api.Get("/images", f.buildListAllImagesAction())
+	api.Post("/images", f.buildCreateNewImage())
+	api.Delete("/images/:imageID", f.buildDeletePhotoAction())
 }
 
-func (f FiberEngine) buildListAllPhotosAction() fiber.Handler {
+func (f FiberEngine) buildListAllImagesAction() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		action := actions.NewListAllPhotosAction(f.ctx, f.db)
+		action := actions.NewListAllImagesAction(f.ctx, f.db)
 
 		return action.Execute(c)
 	}
 }
 
-func (f FiberEngine) buildCreateNewPhotoAction() fiber.Handler {
+func (f FiberEngine) buildCreateNewImage() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		action := actions.NewCreateNewPhotoAction(f.ctx, f.db)
+		action := actions.NewCreateNewImageAction(f.ctx, f.db)
 
 		return action.Execute(c)
 	}
@@ -78,7 +78,7 @@ func (f FiberEngine) buildCreateNewPhotoAction() fiber.Handler {
 
 func (f FiberEngine) buildDeletePhotoAction() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		action := actions.NewDeletePhotoAction(f.ctx, f.db)
+		action := actions.NewDeleteImageAction(f.ctx, f.db)
 
 		return action.Execute(c)
 	}
