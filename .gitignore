@@ -1,0 +1,6 @@
+.bin/*
+
+web/static/*
+!web/static/.gitkeep
+
+.env
