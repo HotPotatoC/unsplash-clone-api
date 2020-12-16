@@ -17,8 +17,9 @@ type CreateNewImageAction struct {
 }
 
 type createNewImageInput struct {
-	Label string `json:"label" validate:"required,max=128"`
-	URL   string `json:"url" validate:"required,url"`
+	Label    string `json:"label" validate:"required,max=128"`
+	URL      string `json:"url" validate:"required,url"`
+	Password string `json:"password" validate:"omitempty,min=6"`
 }
 
 type createNewImageErrorOutput struct {

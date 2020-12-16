@@ -85,3 +85,47 @@ func (m MongoHandler) Delete(ctx context.Context, collection string, filter inte
 	}
 	return count.DeletedCount, nil
 }
+
+// MongoSession dependencies
+type MongoSession struct {
+	session mongo.Session
+}
+
+func newMongoHandlerSession(session mongo.Session) *MongoSession {
+	return &MongoSession{
+		session: session,
+	}
+}
+
+// StartSession starts a new session
+func (m MongoHandler) StartSession() (*MongoSession, error) {
+	session, err := m.Client.StartSession()
+	if err != nil {
+		return nil, err
+	}
+
+	return newMongoHandlerSession(session), nil
+}
+
+// WithTransaction starts a transaction for the current session
+func (m *MongoSession) WithTransaction(ctx context.Context, callback func(context.Context) error) error {
+	cb := func(sessContext mongo.SessionContext) (interface{}, error) {
+		if err := callback(sessContext); err != nil {
+			return nil, err
+		}
+
+		return nil, nil
+	}
+
+	_, err := m.session.WithTransaction(ctx, cb)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// EndSession ends the session
+func (m *MongoSession) EndSession(ctx context.Context) {
+	m.session.EndSession(ctx)
+}

@@ -15,6 +15,12 @@ type ListAllImagesAction struct {
 	mongo *database.MongoHandler
 }
 
+type listAllImagesOutput struct {
+	ID    string `json:"id"`
+	Label string `json:"label"`
+	URL   string `json:"url"`
+}
+
 // NewListAllImagesAction constructs a new list all photos action
 func NewListAllImagesAction(ctx context.Context, mongo *database.MongoHandler) ListAllImagesAction {
 	return ListAllImagesAction{
@@ -35,6 +41,21 @@ func (a ListAllImagesAction) Execute(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"total_items": len(images),
-		"items":       images,
+		"items":       a.output(images),
 	})
+}
+
+// output handles the display of the data
+func (a ListAllImagesAction) output(images []entity.Image) []listAllImagesOutput {
+	output := make([]listAllImagesOutput, 0)
+
+	for _, image := range images {
+		output = append(output, listAllImagesOutput{
+			ID:    image.ID.Hex(),
+			Label: image.Label,
+			URL:   image.URL,
+		})
+	}
+
+	return output
 }
