@@ -1,1 +1,1 @@
-web: make build-and-run
+web: bin/api
