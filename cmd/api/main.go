@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"os"
 
 	"github.com/HotPotatoC/unsplash-clone/pkg/database"
 	"github.com/HotPotatoC/unsplash-clone/pkg/server"
