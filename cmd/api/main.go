@@ -20,7 +20,7 @@ func main() {
 
 	db := database.NewMongoHandler()
 
-	server := server.NewFiberApp(ctx, db, ":5000", fiber.Config{
+	server := server.NewFiberApp(ctx, db, os.Getenv("PORT"), fiber.Config{
 		Prefork: true,
 	})
 
